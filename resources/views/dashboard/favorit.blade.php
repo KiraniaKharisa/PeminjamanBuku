@@ -46,7 +46,7 @@
     <div class="grid grid-cols-1 min-[1200px]:grid-cols-2 mt-5 gap-5">
         @foreach ($bukuFavorit as $favorit)
             <a class="card_koleksi">
-                <form action="{{ route('favorit_delete', ['id' => $favorit->id]) }}" method="POST">
+                <form action="{{ route('favorit_delete', ['id' => $favorit->id_favorit]) }}" method="POST">
                     @method('DELETE')
                     @csrf
                     <button type="submit" class="hapus_koleksi" id="btn-delete" data-pesan="Anda Yakin Ingin Menghapus Koleksi Ini ?"><i class="bx bxs-trash"></i></button>

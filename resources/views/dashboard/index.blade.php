@@ -7,7 +7,7 @@
 @section('container')
     <div class="title-container">
         <div>
-            <h1 class="text-xl min-[460px]:text-2xl min-[600px]:text-3xl font-bold mb-2">Selamat  <span class="text-blue-600">{{ auth()->user()->nama }}</span> 👋</h1>
+            <h1 class="text-xl min-[460px]:text-2xl min-[600px]:text-3xl font-bold mb-2">Selamat  {{ $salam }}, <span class="text-blue-600">{{ auth()->user()->nama }}</span> 👋</h1>
             <p class="text-xs min-[460px]:text-[13px] min-[600px]:text-sm text-gray-600">Selamat Datang! Temukan, Pinjam, dan Nikmati Buku Favorit Anda di Sini</p>
         </div>
 

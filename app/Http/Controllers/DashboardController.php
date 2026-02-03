@@ -266,7 +266,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function favorit_toggle(Request $request, string $id) {
+    public function favorit_togle(Request $request, string $id) {
         $userId = auth()->user()->id_user;
 
         $favorit = Buku_Favorit::where('user_id', $userId)
