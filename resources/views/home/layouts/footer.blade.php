@@ -40,7 +40,7 @@
             </a>
             <a>
                 <div><i class='bx bxs-envelope' ></i></div>
-                <h5>lapakbaca@gmail.com</h5>
+                <h5>Buku Kita@gmail.com</h5>
             </a>
             <a>
                 <div><i class='bx bxl-whatsapp' ></i></div>

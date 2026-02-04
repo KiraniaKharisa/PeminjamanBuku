@@ -10,7 +10,6 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransaksiController;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/kategori', [HomeController::class, 'kategori'])->name('kategori.home');
 Route::get('/buku', [HomeController::class, 'buku'])->name('buku.home');
 Route::get('/buku/{id}', [HomeController::class, 'buku_detail'])->name('buku_detail');
@@ -19,6 +18,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/authentikasi', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');  
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 });
 
 
@@ -35,12 +35,15 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function (){
     Route::delete('/favorit/{id}', [DashboardController::class, 'favorit_delete'])->name('favorit_delete');
 
     Route::middleware(['role:1'])->group(function () {
+        Route::put('/transaksi/editstatus/{id}/{status}', [TransaksiController::class, 'edit_status'])->name('edit_status_transaksi');
+        Route::get('/aktifasi-user', [UserController::class, 'aktivasi'])->name('aktifasi');
+        Route::put('/aktifasi-user/{id}', [UserController::class, 'aktifasi_toggle'])->name('aktifasi_toggle');
+
         Route::resource('user', UserController::class);
         Route::resource('role', RoleController::class); 
         Route::resource('buku', BukuController::class);
         Route::resource('kategori', KategoriController::class);
         Route::resource('transaksi', TransaksiController::class);
-        Route::put('transaksi/editstatus/{id}/{status}', [TransaksiController::class, 'edit_status'])->name('edit_status_transaksi');
     });
 });
 

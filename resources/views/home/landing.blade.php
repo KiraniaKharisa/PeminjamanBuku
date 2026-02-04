@@ -18,7 +18,7 @@
             Jelajahi Dunia Membaca Tanpa Batas
           </h1>
         
-          <p class="text-sm min-[1120px]:text-[15px] min-[1270px]:text-[16px]">Temukan berbagai koleksi buku, ajukan peminjaman dengan mudah, dan nikmati pengalaman membaca yang nyaman di Lapak Baca.</p>
+          <p class="text-sm min-[1120px]:text-[15px] min-[1270px]:text-[16px]">Temukan berbagai koleksi buku, ajukan peminjaman dengan mudah, dan nikmati pengalaman membaca yang nyaman di Buku Kita.</p>
           <div class="flex flex-col gap-y-5 min-[510px]:gap-y-0 min-[510px]:flex-row gap-x-8 items-center mt-8">
             <a href="{{ route('buku.home') }}" class="linkhoveranimation text-[13px] min-[1030px]:text-sm min-[1120px]:text-[15px] filled"><i class='bx bxs-book-alt'></i> Mulai Membacaa</a>
             <a href="#buku_populer" class="linkhoveranimation text-[13px] min-[1030px]:text-sm min-[1120px]:text-[15px]">Buku Populer <i class='bx bxs-book-heart'></i></a>
@@ -191,8 +191,8 @@
         <div class="flex-1">
           {{-- <h3 class="font-cursive text-blue-400 text-[25px] xl:text-3xl 2xl:text-4xl -mb-3">Ayo Tingkatkan Literasi</h3> --}}
           <h1 class="font-fredoka text-2xl xl:text-3xl 2xl:text-4xl font-semibold">Kami Hadir Untuk Memudahkan Peminjaman Buku Anda</h1>
-          <p class="mt-5 text-sm xl:text-[15px] 2xl:text-[16px]">Lapak Baca adalah platform peminjaman buku yang memudahkan pengguna mengakses dan meminjam koleksi bacaan secara praktis. Kami berkomitmen menghadirkan layanan peminjaman yang tertata, informatif, dan nyaman, mulai dari pengelolaan data buku, proses peminjaman, hingga pengembalian yang terjadwal dengan jelas.</p>
-          <p class="mt-3 text-sm xl:text-[15px] 2xl:text-[16px]">Melalui Lapak Baca, pengguna dapat melihat ketersediaan buku secara real-time, mengajukan peminjaman dengan mudah, serta memantau status peminjaman dan tenggat pengembalian. Sistem kami dirancang untuk mendukung kebiasaan membaca yang lebih teratur sekaligus membantu pengelolaan koleksi buku agar lebih efisien dan terkontrol.</p>
+          <p class="mt-5 text-sm xl:text-[15px] 2xl:text-[16px]">Buku Kita adalah platform peminjaman buku yang memudahkan pengguna mengakses dan meminjam koleksi bacaan secara praktis. Kami berkomitmen menghadirkan layanan peminjaman yang tertata, informatif, dan nyaman, mulai dari pengelolaan data buku, proses peminjaman, hingga pengembalian yang terjadwal dengan jelas.</p>
+          <p class="mt-3 text-sm xl:text-[15px] 2xl:text-[16px]">Melalui Buku Kita, pengguna dapat melihat ketersediaan buku secara real-time, mengajukan peminjaman dengan mudah, serta memantau status peminjaman dan tenggat pengembalian. Sistem kami dirancang untuk mendukung kebiasaan membaca yang lebih teratur sekaligus membantu pengelolaan koleksi buku agar lebih efisien dan terkontrol.</p>
           
             {{-- <div class="visimisiswapperabout hidden xl:block">
               <div class="button-container">

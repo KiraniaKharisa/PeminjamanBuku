@@ -647,7 +647,7 @@ body {
     @apply pt-30 px-5 min-[450px]:px-5 min-[850px]:px-10;
 
     .card-container {
-      @apply grid grid-cols-1 min-[1110px]:grid-cols-3 gap-8;
+      @apply grid gap-8;
 
       .card-buku {
         @apply lg:col-span-2;

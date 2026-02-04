@@ -16,7 +16,9 @@
         @if (!auth()->check())
             <a href="{{ route('login') }}" class="koleksi_btn"><i class='bx bxs-door-open text-lg'></i> Masuk</a>
         @else
-            <a href="{{ route('dashboard') }}" class="koleksi_btn"><i class='bx bxs-dashboard text-lg'></i> Dashboard</a>
+            {{-- <a href="{{ route('dashboard') }}" class="koleksi_btn"><i class='bx bxs-dashboard text-lg'></i> Dashboard</a> --}}
+
+            <a href="{{ route('dashboard') }}" class="hidden xl:flex items-center justify-center text-sm gap-x-2 flex-row-reverse bg-gray-200 px-3 py-1 rounded-full"><img src="{{ auth()->user()->profil ? asset('storage/image/profil/' . auth()->user()->profil) : 'https://ui-avatars.com/api/?name='. preg_replace('/\s+/', '', auth()->user()->nama) . '&background=random&length=2'}}" class="size-8 rounded-full object-cover" alt=""> {{ mb_strimwidth(auth()->user()->nama, 0, 7) }}</a>
         @endif
         
         <div class="hamburger-navbar">
@@ -34,6 +36,8 @@
     @if (!auth()->check())
         <li class="flex justify-center"><a href="{{ route('login') }}" class="koleksi_btn"><i class="bx bxs-door-open text-lg"></i> Masuk</a></li>
     @else
-        <li class="flex justify-center"><a href="{{ route('dashboard') }}" class="koleksi_btn"><i class="bx bxs-dashboard text-lg"></i> Dashboard</a></li>
+        {{-- <li class="flex justify-center"><a href="{{ route('dashboard') }}" class="koleksi_btn"><i class="bx bxs-dashboard text-lg"></i> Dashboard</a></li> --}}
+
+        <li class="flex justify-center"><a href="{{ route('dashboard') }}" class="flex items-center justify-center text-sm gap-x-2 flex-row-reverse bg-gray-200 px-3 py-1 rounded-full"><img src="{{ auth()->user()->profil ? asset('storage/image/profil/' . auth()->user()->profil) : 'https://ui-avatars.com/api/?name='. preg_replace('/\s+/', '', auth()->user()->nama) . '&background=random&length=2'}}" class="size-8 rounded-full object-cover" alt=""> {{ mb_strimwidth(auth()->user()->nama, 0, 7) }}</a></li>
     @endif
 </div>

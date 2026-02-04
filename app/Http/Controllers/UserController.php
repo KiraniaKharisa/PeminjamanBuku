@@ -24,10 +24,14 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query();
+        // Tampilkan User yang sudah aktif
+        $query = User::query()->where('is_aktif', 1);
 
         if($request->filled('search')) {
-            $query->where('nama', 'like', '%' . $request->search . '%');
+            $query->where(function($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('username', 'like', '%' . $request->search . '%');
+            });
         }
 
         match($request->order) {
@@ -81,7 +85,7 @@ class UserController extends Controller
             $validate['password'] = Hash::make($validate['password']);
             $createData = User::create($validate);
 
-            return redirect()->route('user.index')->with('sukses', 'Data User berhasil ditambahkan!');
+            return redirect()->route('aktifasi')->with('sukses', 'Data User berhasil ditambahkan, Aktifasi Sekarang!');
         } catch(Exception $e) {
             return redirect()->back()->with('error', 'Data User gagal ditambahkan!');
         }
@@ -130,6 +134,7 @@ class UserController extends Controller
         try{
             $user = User::findOrFail($id);
             $profil = $user->profil;
+            
 
             if($validate['inputHapus'] == 'true') {
                 if($profil != null) {
@@ -154,7 +159,13 @@ class UserController extends Controller
 
             $user->update($validate);
 
-            return redirect()->route('user.index')->with('sukses', 'Data User berhasil diubah!');
+            $is_aktif = $user->is_aktif;
+
+            if($is_aktif == 1) {
+                return redirect()->route('user.index')->with('sukses', 'Data User berhasil diubah dan diaktifkan!');
+            }
+
+            return redirect()->route('aktifasi')->with('sukses', 'Data User berhasil diubah!');
         } catch(Exception $e) {
             return redirect()->back()->with('error', 'Data User gagal diubah!');
         }
@@ -167,6 +178,7 @@ class UserController extends Controller
     {
         try {
             $deleteData = User::findOrFail($id);
+            $is_aktif = $deleteData->is_aktif;
 
             if($deleteData->profil != null) {
                 $imageLama = $this->profilPath . $deleteData->profil;
@@ -175,9 +187,59 @@ class UserController extends Controller
             
             $deleteData->delete();
 
-            return redirect()->route('user.index')->with('sukses', 'Data User berhasil dihapus!');
+           if($is_aktif == 1) {
+                return redirect()->route('user.index')->with('sukses', 'Data User berhasil dihapus!');
+            }
+
+            return redirect()->route('aktifasi')->with('sukses', 'Data User berhasil dihapus!');
         } catch (Exception $e) {
-            return redirect()->route('user.index')->with('error', 'Data User gagal dihapus!');
+            return redirect()->back()->with('error', 'Data User gagal dihapus!');
+        }
+    }
+
+    public function aktivasi(Request $request) {
+        // Tampilkan User yang sudah belom aktif
+        $query = User::query()->where('is_aktif', 0);
+
+        if($request->filled('search')) {
+            $query->where(function($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('username', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        match($request->order) {
+            'asc' => $query->orderBy('nama', 'asc'),
+            'desc' => $query->orderBy('nama', 'desc'),
+            'newest' => $query->orderBy('created_at', 'desc'),
+            'oldest' => $query->orderBy('created_at', 'asc'),
+            default => $query->orderBy('nama', 'asc')
+        };
+
+        $data = $query->get();
+
+        return view('dashboard.user.aktifasi', [
+            'users' => $data
+        ]);
+    }
+
+    public function aktifasi_toggle(string $id) {
+        try{    
+            $user = User::findOrFail($id);
+            $is_aktif = $user->is_aktif;
+
+            if($is_aktif == 1) {
+                $is_Aktif = 0;
+            } else {
+                $is_Aktif = 1;
+            }
+
+            $user->update(['is_aktif' => $is_Aktif]);
+
+            return redirect()->back()->with('sukses', 'Data User berhasil diaktifasi!');
+
+        } catch(Exception $e) {
+            return redirect()->back()->with('error', 'Data User gagal diaktifasi!');
         }
     }
 }

@@ -42,10 +42,26 @@
             <span class="hidden sm:block">:</span>
             <span class="font-semibold text-gray-800">{{ $user->created_at }}</span>
         </div>
-        <div class="flex justify-end gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-[140px_10px_1fr] gap-y-1">
+            <span class="font-medium text-gray-600">User Aktif</span>
+            <span class="hidden sm:block">:</span>
+            <span class="font-semibold text-gray-800">{{ $user->is_aktif == 1 ? 'Aktif' : 'Tidak Aktif' }}</span>
+        </div>
+        <div class="flex justify-end gap-3">          
             <a href="{{ route('user.edit', $user) }}" type="submit" class="rounded-lg bg-blue-500 px-5 py-2 text-sm font-medium text-white hover:bg-blue-600 flex items-center gap-2">
                 <i class='bx bxs-pencil' ></i> Edit
             </a>
+            
+            <form action="{{ route('aktifasi_toggle', ['id' => $user->id_user]) }}" method="POST">
+                @method('PUT')
+                @csrf
+                <button id="btn-delete" data-pesan="Apakah Anda Yakin Ingin Mengaktifasi Data Ini" type="submit" class="rounded-lg {{ $user->is_aktif == 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600' }} px-5 py-2 text-sm font-medium text-white flex items-center gap-2">
+                    {!! $user->is_aktif == 0
+                        ? "<i class='bx bx-check-circle'></i> Aktifasi"
+                        : "<i class='bx bx-x'></i> Nonaktif"
+                    !!}
+                </button>
+            </form>
             <form action="{{ route('user.destroy', $user) }}" method="POST">
                 @method('DELETE')
                 @csrf

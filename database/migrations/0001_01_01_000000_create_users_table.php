@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('role_id');
             $table->string('profil')->nullable();
+            $table->boolean('is_aktif')->default(false); 
             $table->timestamps();
         });
 

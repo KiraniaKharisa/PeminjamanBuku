@@ -11,7 +11,7 @@
 @section('container')
 
     <div class="halaman-detail-buku">
-        <div class="card-container">
+        <div class="card-container {{ auth()->check() ? 'grid-cols-1 min-[1110px]:grid-cols-3' : 'grid-cols-1' }}">
 
             <!-- DETAIL BUKU -->
             <div class="card-buku">
@@ -68,6 +68,7 @@
             </div>
 
             <!-- FORM PEMINJAMAN -->
+            @if(auth()->check())
             <div class="form-peminjaman-buku">
                 <div class="card-form-peminjaman-buku">
 
@@ -129,6 +130,7 @@
 
                 </div>
             </div>
+            @endif
 
         </div>
 

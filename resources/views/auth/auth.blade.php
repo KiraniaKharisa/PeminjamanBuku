@@ -8,7 +8,7 @@
             href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@400;500;600;700;800;900&display=swap" 
             rel="stylesheet">
         @vite(['resources/css/auth.css', 'resources/js/auth.js', 'resources/css/app.css', 'resources/js/app.js'])
-        <title>Lapak Baca | Halaman Authentikasi</title>
+        <title>Buku Kita | Halaman Authentikasi</title>
     </head>
 
     <body>

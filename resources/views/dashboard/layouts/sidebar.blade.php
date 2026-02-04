@@ -19,15 +19,16 @@
 			<li>
 				<a href="#" class="{{ request()->is('dashboard/role*') || request()->is('dashboard/user*') ? 'active' : '' }}"><i class='bx bxs-user-detail icon' ></i> Keanggotaan <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown {{ request()->is('dashboard/role*') || request()->is('dashboard/user*') ? 'show' : '' }}">
-					<li><a href="{{ route('role.index') }}" class="{{ request()->is('dashboard/role*') ? 'active' : '' }}">Hak Akses</a></li>
+					{{-- <li><a href="{{ route('role.index') }}" class="{{ request()->is('dashboard/role*') ? 'active' : '' }}">Hak Akses</a></li> --}}
 					<li><a href="{{ route('user.index') }}" class="{{ request()->is('dashboard/user*') ? 'active' : '' }}">Pengguna</a></li>
+					<li><a href="{{ route('aktifasi') }}" class="{{ request()->is('dashboard/user/aktifasi*') ? 'active' : '' }}">Aktifasi</a></li>
 				</ul>
 			</li>
 			<li><a href="{{ route('transaksi.index') }}" class="{{ request()->is('dashboard/transaksi*') ? 'active' : '' }}"><i class='bx bx-spreadsheet icon'></i> Transaksi</a></li>
 		@endcan
 
 		<div class="mt-auto">
-			<li class="mt-5"><a href="{{ route('home') }}"><i class='bx bxs-home icon' ></i> Kembali</a></li>
+			<li class="mt-5"><a href="{{ route('buku.home') }}"><i class='bx bxs-home icon' ></i> Kembali</a></li>
 			<li id="toggle-sidebar-2"><a><i class='bx bx-collapse icon' ></i> <span>Perkecil</span></a></li>
 		</div>
 	</ul>
