@@ -29,11 +29,17 @@ class Transaksi extends Model
         }
 
        return match($this->status) {
-        0 => 'Tertunda',
-        1 => 'Dipinjam',
-        2 => 'Dikembalikan',
-        3 => 'Ditolak',
+        '0' => 'Ditunda',
+        '1' => 'Dipinjam',
+        '2' => 'Dikembalikan',
+        '3' => 'Ditolak',
         default => 'Tidak DIketahui'
        };
     }
+
+    public function getPinjamanSaatIniAttribute() {
+        return $this->total_pinjam - $this->jumlah_dikembalikan;
+    }
+
+    
 }

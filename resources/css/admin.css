@@ -228,6 +228,24 @@ main .card .label {
 	@apply text-sm font-bold;
 }
 
+.btn-detail {
+    @apply rounded-lg px-5 py-2 text-sm font-medium flex items-center gap-2;
+}
+
+.btn-danger-detail {
+    @apply rounded-lg bg-red-500 px-5 py-2 text-sm font-medium text-white hover:bg-red-600 flex items-center gap-2;
+}
+
+.bgblur {
+    @apply top-0 left-0 w-full h-screen fixed bg-gray-50/30 backdrop-blur-sm z-99 opacity-0 pointer-events-none transition duration-300;
+}
+
+.bgblur.active {
+    @apply opacity-100 pointer-events-auto;
+}
+
+
+
 @layer components {
     .cardTrafficDashboard {
         @apply bg-white rounded-xl shadow p-5 flex items-center gap-4 hover:shadow-lg transition;
@@ -275,4 +293,50 @@ main .card .label {
             }
         }
     }
+
+    
+    .modal-quantity {
+        @apply bg-gray-100 z-[1000] opacity-0 pointer-events-none scale-0 fixed top-1/2 left-1/2 -translate-1/2 rounded-xl shadow-2xl w-[calc(100%-40px)] max-w-md mx-auto overflow-hidden border border-gray-400 duration-500 delay-200;
+
+        .header-modal-quantity {
+            @apply p-6 border-b border-gray-400;
+
+            h3 {
+                @apply text-xl font-bold text-gray-900 line-clamp-1;
+            }
+
+            p {
+                @apply text-sm text-gray-600 mt-1
+            }
+        }
+
+        .body-modal-quantity {
+            @apply p-6;
+
+            label {
+                @apply block text-sm font-medium text-gray-600 mb-2;
+            }
+
+            input {
+                @apply w-full px-4 text-sm md:text-base py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-gray-600;
+            }
+        }
+
+        .footer-modal-quantity {
+            @apply p-6 bg-gray-100 flex flex-col sm:flex-row-reverse gap-3;
+
+            #btn_kirim {
+                @apply w-full sm:w-auto bg-blue-500 text-white font-bold py-2.5 px-8 rounded-lg transition-colors shadow-md active:scale-95;
+            }
+
+            #btn_close {
+                @apply w-full sm:w-auto border border-gray-400 text-gray-900 font-semibold py-2.5 px-8 rounded-lg hover:bg-gray-400 transition-colors;
+            }
+        }
+    }
+
+    .modal-quantity.active {
+        @apply scale-100 opacity-100 pointer-events-auto;
+    }
+
 }

@@ -33,11 +33,15 @@ Route::prefix('/dashboard')->middleware(['auth'])->group(function (){
     Route::get('/favorit', [DashboardController::class, 'favorit'])->name('favorit');
     Route::post('/favorit/{id}', [DashboardController::class, 'favorit_togle'])->name('favorit_togle');
     Route::delete('/favorit/{id}', [DashboardController::class, 'favorit_delete'])->name('favorit_delete');
+    Route::get('/pengembalian', [DashboardController::class, 'pengembalian'])->name('pengembalian');
+    Route::put('/pengembalian', [DashboardController::class, 'pengembalian_update'])->name('pengembalian_update');
+    Route::put('/batalkan_pengajuan/{id}', [DashboardController::class, 'batalkan_pengajuan'])->name('batalkan_pengajuan');
 
     Route::middleware(['role:1'])->group(function () {
         Route::put('/transaksi/editstatus/{id}/{status}', [TransaksiController::class, 'edit_status'])->name('edit_status_transaksi');
         Route::get('/aktifasi-user', [UserController::class, 'aktivasi'])->name('aktifasi');
         Route::put('/aktifasi-user/{id}', [UserController::class, 'aktifasi_toggle'])->name('aktifasi_toggle');
+        Route::get('/pengembalian-transaksi', [TransaksiController::class, 'request_transaksi'])->name('transaksi.request');
 
         Route::resource('user', UserController::class);
         Route::resource('role', RoleController::class); 

@@ -298,4 +298,69 @@ class DashboardController extends Controller
             return redirect()->route('favorit')->with('error', 'Gagal Menghapus Data Favorit');
         }
     }
+
+    
+    public function pengembalian(Request $request) {
+        $query = Transaksi::with('buku');
+
+        if ($request->filled('search')) {
+            $query->where('id_transaksi', 'like', "%$request->search%");
+        }
+
+        $transaksiPerBulan = $query->where('user_id', auth()->user()->id_user)
+                                                ->where('status', 1)
+                                                ->orderByDesc('created_at')
+                                                ->get()
+                                                ->groupBy(function ($item) {
+                                                    return $item->created_at->format('Y-m');
+                                                })
+                                                ->map(function ($items, $bulan) {
+                                                    return [
+                                                        'label' => Carbon::createFromFormat('Y-m', $bulan)->translatedFormat('F Y'),
+                                                        'items' => $items
+                                                    ];
+                                                });
+
+        return view('dashboard.pengembalian', [
+            'transaksiPerBulan' => $transaksiPerBulan
+        ]);
+    }
+
+    public function pengembalian_update(Request $request) {
+
+        if(!$request->jumlah_pengajuan || !$request->id_transaksi) {
+            return redirect()->back()->with('error', 'Jumlah pengajuan dan id transaksi tidak boleh kosong');
+        }
+
+        $transaksi = Transaksi::find($request->id_transaksi);
+        
+
+        if($transaksi == null) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
+
+        if($request->jumlah_pengajuan > $transaksi->pinjamanSaatIni) {
+            return redirect()->back()->with('error', 'Pengajuan tidak boleh lebih dari pinjaman saat ini');
+        }
+
+        $transaksi->update(['ajukan_pengembalian' => true, 'jumlah_pengajuan' => $request->jumlah_pengajuan]);
+
+        return $request->session()->flash('sukses', 'Berhasil mengajukan pengembalian');
+    }
+
+    public function batalkan_pengajuan(string $id) {
+        $transaksi = Transaksi::findOrFail($id);
+
+        try {
+            if($transaksi->ajukan_pengembalian == 0) {
+                return redirect()->back()->with('error', 'Transaksi ini belum diajukan pengembalian');
+            }
+
+            $transaksi->update(['ajukan_pengembalian' => false, 'jumlah_pengajuan' => 0]);
+            return redirect()->back()->with('sukses', 'Berhasil membatalkan pengajuan');
+        } catch(Exception $e) {
+            return redirect()->back()->with('error', 'Gagal membatalkan pengajuan');
+        }
+    }
+
 }

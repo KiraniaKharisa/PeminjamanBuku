@@ -194,9 +194,10 @@ class TransaksiController extends Controller
 
     public function edit_status(Request $request, string $id, string $status) {
         $gagalTransaksi = null;
+        $responMessage = null;
 
         try {
-            DB::transaction(function () use ($id, $status, &$gagalTransaksi) {
+            DB::transaction(function () use ($id, $status, &$gagalTransaksi, $request, &$responMessage) {
 
                 // Lock transaksi
                 $transaksi = Transaksi::lockForUpdate()->findOrFail($id);
@@ -245,11 +246,42 @@ class TransaksiController extends Controller
                     // Kondisi Ketika Dia Mau Merubah Status Dikembalikan
                     if ($status === 'dikembalikan') {
 
-                        // Kembalikan stok
-                        $buku->stok += $transaksi->total_pinjam;
+                        if(!$request->has('jumlah_kembali')) {
+                            throw new \Exception('INPUT_DATA_KEMBALI');
+                        }
+
+                        if($request->jumlah_kembali > $transaksi->pinjamanSaatIni) {
+                            throw new \Exception('BERLEBIHAN_JUMLAH_KEMBALI');
+                        }
+
+                        if($request->has('is_pengajuan') && $request->is_pengajuan == true) {
+                            if($request->jumlah_kembali > $transaksi->jumlah_pengajuan){
+                                throw new \Exception('JUMLAH_KEMBALI_LEBIH_DARI_PENGAJUAN');
+                            }
+                        }
+
+                        // Hitung kembali total pinjaman
+                        $jumlahDikembalikan = $transaksi->jumlah_dikembalikan + $request->jumlah_kembali;
+                        // Kembalikan Buku
+                        $buku->stok += $request->jumlah_kembali;
                         $buku->save();
 
-                        $statusQuery = 2;
+                        // ubah jumlah dikembalikannya
+                        if($request->has('is_pengajuan') && $request->is_pengajuan == true) {
+                            $jumlah_pengajuan = $transaksi->jumlah_pengajuan - $request->jumlah_kembali;
+                            $transaksi->update(['jumlah_dikembalikan' => $jumlahDikembalikan, 'jumlah_pengajuan' => $jumlah_pengajuan, 'ajukan_pengembalian' => $jumlah_pengajuan == 0 ? 0 : 1]);
+                        } else {
+                            $transaksi->update(['jumlah_dikembalikan' => $jumlahDikembalikan]);
+                        }
+
+                        // Jika pinjaman Saat ini sama dengan jumlah yang dikembalikan rubah status menjadi dikembalikan
+                        if($transaksi->total_pinjam == $jumlahDikembalikan) {
+                            $transaksi->update(['status' => 2, 'ajukan_pengembalian' => false, 'jumlah_pengajuan' => 0]);
+                            $responMessage = 'Transaksi berhasil dirubah menjadi dikembalikan';
+                        } else {
+                            $responMessage = 'Jumlah yang dikembalikan sudah ditambahkan';
+                        }
+                        
 
                     // Jika Statusnya Selain Diatas Maka Kirim Pesan Error
                     } else {
@@ -279,17 +311,18 @@ class TransaksiController extends Controller
                 }
 
                 // 🔄 Update status
-                $transaksi->update(['status' => $statusQuery]);
+                if($status != 'dikembalikan') {
+                    $transaksi->update(['status' => $statusQuery]);
+                }
             });
 
             if(!empty($gagalTransaksi)) {
                 return redirect()->back()->with('error', $gagalTransaksi);
             }
 
-            return redirect()->back()->with('sukses', 'Status berhasil diperbarui menjadi ' . $status);
+            return redirect()->back()->with('sukses', $responMessage ?? "Status berhasil diperbarui menjadi {$status}");
 
         } catch (\Exception $e) {
-
             return redirect()->back()->with('error', match ($e->getMessage()) {
                 'INVALID_STATUS_PENDING' => 'Hanya bisa mengajukan Disetujui atau Ditolak',
                 'INVALID_STATUS_SETUJU' => 'Hanya bisa mengajukan Dikembalikan',
@@ -297,8 +330,30 @@ class TransaksiController extends Controller
                 'STOK_KURANG' => 'Stok buku tidak mencukupi',
                 'AUTO_TOLAK' => 'Transaksi ditolak karena tanggal kembali sudah lewat',
                 'UNKNOWN_STATUS' => 'Gagal mengubah status, status tidak diketahui',
-                default => 'Gagal Mengubah Status, Terjadi Error'
+                'INPUT_DATA_KEMBALI' => 'Gagal mengedit transaksi, input jumlah pengajuan tidak ada',
+                'BERLEBIHAN_JUMLAH_KEMBALI' => 'Jumlah kembali tidak boleh lebih dari pinjaman saat ini',
+                'JUMLAH_KEMBALI_LEBIH_DARI_PENGAJUAN' => 'Jumlah kembali tidak boleh lebih dari yang diajukan',
+                default => 'Gagal Mengubah Status, Terjadi Error' . $e->getMessage()
             });
         }
+    }
+
+    public function request_transaksi(Request $request) {
+        $query = Transaksi::query()->where('ajukan_pengembalian', 1);
+
+        if ($request->filled('search')) {
+            $query->where('id_transaksi', 'like', "%$request->search%");
+        }
+
+        match($request->order) {
+            'newest' => $query->orderBy('created_at', 'desc'),
+            'oldest' => $query->orderBy('created_at', 'asc'),
+            default => $query->orderBy('created_at', 'asc')
+        };
+        
+        $data = $query->get();
+        return view('dashboard.transaksi.pengembalian', [
+            'transaksi' => $data
+        ]);
     }
 }

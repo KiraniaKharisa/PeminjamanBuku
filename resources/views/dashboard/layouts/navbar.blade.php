@@ -2,14 +2,14 @@
 	<span class="toggle-sidebar">
 		<i class='bx bx-chevrons-left'></i>
 	</span>
-	<form action="#">
+	<form action="{{ route('buku.home') }}">
 		<div class="form-group">
-			<input type="text" placeholder="Search...">
+			<input type="text" name="search" class="search-input-navbar" placeholder="Search...">
 			<i class='bx bx-search icon hidden min-[550px]:block'></i>
 			<i class='bx bx-search icon block min-[550px]:hidden' id="icon-toggle-input"></i>
 		</div>
 		<div class="form-group-melayang">
-			<input type="text" placeholder="Search...">
+			<input type="text" name="search" class="search-input-navbar" placeholder="Search...">
 			<i class='bx bx-search icon' ></i>
 		</div>
 	</form>
@@ -53,3 +53,13 @@
 		</ul>
 	</div>
 </nav>
+
+<script>
+	document.querySelectorAll('.search-input-navbar').forEach((input) => {
+		input.addEventListener('keydown', (e) => {
+			if(e.key == "Enter") {
+				window.location.href = `{{ route('buku.home') }}?search=${e.target.value}`
+			}
+		})
+	})
+</script>

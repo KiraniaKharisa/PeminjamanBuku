@@ -162,85 +162,86 @@
     </div>
 
   </div>
+  @can('admin')
+    <div class="mt-8">
+      <h3 class="font-bold text-lg min-[600px]:text-xl">Buku Yang Banyak Dipinjam</h3>
 
-  <div class="mt-8">
-    <h3 class="font-bold text-lg min-[600px]:text-xl">Buku Yang Banyak Dipinjam</h3>
-
-    <div class="flex flex-wrap gap-5 mt-5">
-      @foreach ($bukuPopuler as $buku)
-        
-        <a href="{{ route('buku_detail', ['id' => $buku->id_buku]) }}" class="group block w-[250px] rounded-2xl bg-white/80 backdrop-blur shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-    
-            <!-- Cover -->
-            <div class="relative overflow-hidden rounded-t-2xl aspect-[4/5] bg-gray-100">
-                <img
-                    src="{{ asset('storage/image/sampul/' . $buku->sampul) }}"
-                    alt="Cover Buku"
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-    
-                <!-- Status Badge -->
-                <span class="absolute top-3 right-3 rounded-full {{ $buku->stok <= 0 ? 'bg-red-500/90' : 'bg-emerald-500/90' }} 
-                            px-3 py-1 text-xs font-medium text-white shadow">
-                    {{ $buku->stok <= 0 ? 'Tidak Tersedia' : 'Tersedia' }}
-                </span>
-            </div>
-    
-            <!-- Content -->
-            <div class="p-4">
-                <h3 class="text-[15px] font-semibold text-gray-900 leading-snug line-clamp-2">
-                    {{ $buku->judul_buku }}
-                </h3>
-    
-                <p class="mt-1 text-xs text-gray-500">
-                    {{ $buku->penulis }}
-                </p>
-    
-                <!-- Footer -->
-                <div class="mt-4 flex items-center justify-between">
-                    <span class="text-xs font-medium text-gray-600">
-                        Stok: <span class="text-gray-900 font-semibold">{{ $buku->stok }}</span>
-                    </span>
-                </div>
-            </div>
-        </a>
-      @endforeach
-        
+      <div class="flex flex-wrap gap-5 mt-5">
+        @foreach ($bukuPopuler as $buku)
+          
+          <a href="{{ route('buku_detail', ['id' => $buku->id_buku]) }}" class="group block w-[250px] rounded-2xl bg-white/80 backdrop-blur shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      
+              <!-- Cover -->
+              <div class="relative overflow-hidden rounded-t-2xl aspect-[4/5] bg-gray-100">
+                  <img
+                      src="{{ asset('storage/image/sampul/' . $buku->sampul) }}"
+                      alt="Cover Buku"
+                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+      
+                  <!-- Status Badge -->
+                  <span class="absolute top-3 right-3 rounded-full {{ $buku->stok <= 0 ? 'bg-red-500/90' : 'bg-emerald-500/90' }} 
+                              px-3 py-1 text-xs font-medium text-white shadow">
+                      {{ $buku->stok <= 0 ? 'Tidak Tersedia' : 'Tersedia' }}
+                  </span>
+              </div>
+      
+              <!-- Content -->
+              <div class="p-4">
+                  <h3 class="text-[15px] font-semibold text-gray-900 leading-snug line-clamp-2">
+                      {{ $buku->judul_buku }}
+                  </h3>
+      
+                  <p class="mt-1 text-xs text-gray-500">
+                      {{ $buku->penulis }}
+                  </p>
+      
+                  <!-- Footer -->
+                  <div class="mt-4 flex items-center justify-between">
+                      <span class="text-xs font-medium text-gray-600">
+                          Stok: <span class="text-gray-900 font-semibold">{{ $buku->stok }}</span>
+                      </span>
+                  </div>
+              </div>
+          </a>
+        @endforeach
+          
+      </div>
     </div>
-  </div>
 
-  <div class="mt-8">
-    <h3 class="font-bold text-lg min-[600px]:text-xl">Kategori Populer</h3>
+    <div class="mt-8">
+      <h3 class="font-bold text-lg min-[600px]:text-xl">Kategori Populer</h3>
 
-    <div class="grid grid-cols-1 min-[950px]:grid-cols-2 min-[1100px]:grid-cols-3 mt-5 gap-3">
-      @foreach ($kategoriPopuler as $kategori)
-        <a href="{{ route('buku.home') }}?kategori={{ $kategori->id_kategori }}" class="group block rounded-xl border border-gray-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
+      <div class="grid grid-cols-1 min-[950px]:grid-cols-2 min-[1100px]:grid-cols-3 mt-5 gap-3">
+        @foreach ($kategoriPopuler as $kategori)
+          <a href="{{ route('buku.home') }}?kategori={{ $kategori->id_kategori }}" class="group block rounded-xl border border-gray-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg">
 
-            <!-- Header -->
-            <div class="flex items-start justify-between gap-3">
-                <h3 class="text-lg font-semibold text-gray-800 leading-tight line-clamp-2">
-                    {{ $kategori->nama_kategori }}
-                </h3>
+              <!-- Header -->
+              <div class="flex items-start justify-between gap-3">
+                  <h3 class="text-lg font-semibold text-gray-800 leading-tight line-clamp-2">
+                      {{ $kategori->nama_kategori }}
+                  </h3>
 
-                <!-- Badge total buku -->
-                <span class="shrink-0 rounded-full bg-blue-100 px-3 py-1 text-xs
-                            font-medium text-blue-700">
-                    {{ $kategori->buku->count() }} Buku
-                </span>
-            </div>
+                  <!-- Badge total buku -->
+                  <span class="shrink-0 rounded-full bg-blue-100 px-3 py-1 text-xs
+                              font-medium text-blue-700">
+                      {{ $kategori->buku->count() }} Buku
+                  </span>
+              </div>
 
-            <!-- Divider -->
-            <div class="my-4 h-px bg-gray-100"></div>
+              <!-- Divider -->
+              <div class="my-4 h-px bg-gray-100"></div>
 
-            <!-- Footer info -->
-            <p  class="text-xs min-[430px]:text-sm text-gray-500 group-hover:text-gray-700 transition">
-                Lihat semua buku dalam kategori ini →
-            </p>
-        </a>
+              <!-- Footer info -->
+              <p  class="text-xs min-[430px]:text-sm text-gray-500 group-hover:text-gray-700 transition">
+                  Lihat semua buku dalam kategori ini →
+              </p>
+          </a>
 
-      @endforeach
+        @endforeach
+      </div>
     </div>
-  </div>
+  @endcan
 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>

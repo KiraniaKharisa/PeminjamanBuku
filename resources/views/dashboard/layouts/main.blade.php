@@ -28,5 +28,7 @@
 		</main>
 		<!-- MAIN -->
 	</section>
+
+	@yield('modal')
 </body>
 </html>

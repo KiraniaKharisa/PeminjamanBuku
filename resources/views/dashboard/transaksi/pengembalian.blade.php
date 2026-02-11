@@ -1,20 +1,19 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-	Dashboard Admin | Halaman Transaksi
+	Dashboard Admin | Halaman Pengajuan Transaksi
 @endsection
 
 @section('container')
 	<div class="title-container">
 		<div>
-			<h1 class="title">Data Transaksi</h1>
+			<h1 class="title">Data Pengajuan Transaksi</h1>
 			<ul class="breadcrumbs">
 				<li><a href="{{ route('dashboard') }}">Dashboard</a></li>
 				<li class="divider">/</li>
-				<li><a href="#" class="active">Data Transaksi</a></li>
+				<li><a href="#" class="active">Data Pengajuan Transaksi</a></li>
 			</ul>
 		</div>
-        <a href="{{ route('transaksi.create') }}" class="btn-plus"> <i class='bx bx-plus' ></i>Tambah Data</a>
 	</div>
 
 	{{-- Success Alert --}}
@@ -49,15 +48,6 @@
             <option value="newest" {{ request('order') == 'newest' ? 'selected' : '' }}>Terbaru</option>
             <option value="oldest" {{ request('order') == 'oldest' ? 'selected' : '' }}>Terlama</option>
         </select>
-
-        <!-- Status Filter By -->
-        <select name="status_filter" onchange="this.form.submit()" class="px-4 h-[40px] text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="tertunda" {{ request('status_filter') == 'tertunda' ? 'selected' : '' }}>Tertunda</option>
-            <option value="dipinjam" {{ request('status_filter') == 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
-            <option value="terlambat" {{ request('status_filter') == 'terlambat' ? 'selected' : '' }}>Terlambat</option>
-            <option value="dikembalikan" {{ request('status_filter') == 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
-            <option value="ditolak" {{ request('status_filter') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
-        </select>
     </form>
 
 	<div class="overflow-x-auto rounded-xl border mt-3 border-gray-200 shadow-sm">
@@ -66,6 +56,7 @@
             <tr>
                 <th class="px-4 py-3 text-center font-semibold">Buku</th>
                 <th class="px-4 py-3 text-center font-semibold hidden min-[480px]:table-cell">User</th>
+                <th class="px-4 py-3 text-center font-semibold">Pengajuan</th>
                 <th class="px-4 py-3 text-center font-semibold hidden min-[1200px]:table-cell">Tgl. Pinjam</th>
                 <th class="px-4 py-3 text-center font-semibold hidden min-[1200px]:table-cell">Tgl. Kembali</th>
                 <th class="px-4 py-3 text-center font-semibold">Aksi</th>
@@ -73,7 +64,7 @@
         </thead>
 
         <tbody class="divide-y divide-gray-200 bg-white">
-            @forelse ($transaksis as $transaksi)
+            @forelse ($transaksi as $transaksi)
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3">
                     <a href="{{ route('buku.show', $transaksi->buku->id_buku) }}" class="group transition cursor-pointer flex items-center rounded-lg justify-center p-3 flex-col gap-3">
@@ -87,6 +78,7 @@
                         <span class="text-sm font-semibold group-hover:text-blue-600 group-hover:underline transition">{{ mb_strimwidth($transaksi->user->nama, 0, 8, '...') }}</span>
                     </a>
                 </td>
+                <td class="px-4 py-3 text-center font-medium text-sm">{{ $transaksi->jumlah_pengajuan }}</td>
                 <td class="px-4 py-3 text-center font-medium text-sm hidden min-[1200px]:table-cell">{{ $transaksi->tanggal_pinjam }}</td>
                 <td class="px-4 py-3 text-center font-medium text-sm hidden min-[1200px]:table-cell">{{ $transaksi->tanggal_kembali }}</td>
                 <td class="px-4 py-3 align-middle">
@@ -96,37 +88,11 @@
                             <i class='bx bxs-info-circle'></i> Info
                         </a>
 
-                        @if($transaksi->status == 0)
-                            <form action="{{ route('edit_status_transaksi', ['id' => $transaksi->id_transaksi, 'status' => 'disetujui']) }}" class="hidden min-[900px]:block" method="POST">
-                                @method('PUT')
-                                @csrf
-                                <button data-pesan="Apakah Anda Yakin Ingin Mensetujui Data Ini ?" id="btn-delete" type="submit" class="inline-flex items-center gap-1 rounded-lg bg-green-500 px-3 py-1 text-xs text-white hover:bg-green-600">
-                                <i class='bx bx-check'></i> Setuju
-                                </button>
-                            </form>
-
-                            <form action="{{ route('edit_status_transaksi', ['id' => $transaksi->id_transaksi, 'status' => 'ditolak']) }}" class="hidden min-[900px]:block" method="POST">
-                                @method('PUT')
-                                @csrf
-                                <button data-pesan="Apakah Anda Yakin Ingin Menolak Data Ini ?" id="btn-delete" type="submit" class="inline-flex items-center gap-1 rounded-lg bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600">
-                                <i class='bx bx-x'></i> Tolak
-                                </button>
-                            </form>
-                        @elseif ($transaksi->status == 1)
-                            <form class="hidden min-[900px]:block form-kembali" method="POST" data-judul="{{ $transaksi->buku->judul_buku }}" data-max="{{ $transaksi->pinjamanSaatIni }}" data-id="{{ $transaksi->id_transaksi }}">
-                                <button id="btn-kembalikan" class="inline-flex items-center gap-1 rounded-lg bg-green-500 px-3 py-1 text-xs text-white hover:bg-green-600">
-                                <i class='bx bx-check'></i> Sudah Dikembalikan
-                                </button>
-                            </form>
-                        @elseif ($transaksi->status == 3)
-                            <form action="{{ route('edit_status_transaksi', ['id' => $transaksi->id_transaksi, 'status' => 'dipulihkan']) }}" class="hidden min-[900px]:block" method="POST">
-                                @method('PUT')
-                                @csrf
-                                <button data-pesan="Apakah Anda Yakin Ingin Mengembalikan Data Ini ?" id="btn-delete" type="submit" class="inline-flex items-center gap-1 rounded-lg bg-yellow-500 px-3 py-1 text-xs text-white hover:bg-yellow-600">
-                                <i class='bx bx-revision'></i> Pulihkan
-                                </button>
-                            </form>
-                        @endif
+                        <form class="hidden min-[900px]:block form-kembali" method="POST" data-judul="{{ $transaksi->buku->judul_buku }}" data-max="{{ $transaksi->jumlah_pengajuan }}" data-id="{{ $transaksi->id_transaksi }}">
+                            <button id="btn-kembali" type="submit" class="inline-flex items-center gap-1 rounded-lg bg-green-500 px-3 py-1 text-xs text-white hover:bg-green-600">
+                            <i class='bx bx-check'></i> Terima Pengajuan
+                            </button>
+                        </form>
                     </div>
                 </td>
             </tr>
@@ -183,7 +149,7 @@
         let maximum_quant = 0;
         let id_transaksi = 0;
 
-        document.querySelectorAll('#btn-kembalikan').forEach(btn => {
+        document.querySelectorAll('#btn-kembali').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -250,7 +216,7 @@
                     'Accept': 'aplication/json'
                 },
                 body: JSON.stringify({
-                    is_pengajuan: false,
+                    is_pengajuan: true,
                     jumlah_kembali: value,
                 })
             })
@@ -261,3 +227,4 @@
         })
     </script>
 @endsection
+

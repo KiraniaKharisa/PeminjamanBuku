@@ -4,8 +4,12 @@
 	<ul class="side-menu">
 		<li><a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}"><i class='bx bxs-dashboard icon' ></i> Dashboard</a></li>
 		<li><a href="{{ route('edit_profil') }}" class="{{ request()->is('dashboard/editprofil') ? 'active' : '' }}"><i class='bx bxs-user icon' ></i> Profil</a></li>
-		<li><a href="{{ route('riwayat') }}" class="{{ request()->is('dashboard/riwayat') ? 'active' : '' }}"><i class='bx bxs-time icon' ></i> Riwayat</a></li>
-		<li><a href="{{ route('favorit') }}" class="{{ request()->is('dashboard/favorit') ? 'active' : '' }}"><i class='bx bxs-bookmarks icon' ></i> Favorit</a></li>
+		@can('user')
+			<li><a href="{{ route('riwayat') }}" class="{{ request()->is('dashboard/riwayat') ? 'active' : '' }}"><i class='bx bxs-time icon' ></i> Riwayat</a></li>
+			<li><a href="{{ route('favorit') }}" class="{{ request()->is('dashboard/favorit') ? 'active' : '' }}"><i class='bx bxs-bookmarks icon' ></i> Favorit</a></li>
+			<li><a href="{{ route('buku.home') }}"><i class='bx bxs-home icon' ></i> Peminjaman</a></li>
+			<li><a href="{{ route('pengembalian') }}" class="{{ request()->is('dashboard/pengembalian') ? 'active' : '' }}"><i class='bx bxs-donate-heart icon' ></i> Pengembalian</a></li>
+		@endcan
 		
 		@can('admin')
 			<li class="divider" data-text="ADMIN">ADMIN</li>
@@ -24,11 +28,16 @@
 					<li><a href="{{ route('aktifasi') }}" class="{{ request()->is('dashboard/user/aktifasi*') ? 'active' : '' }}">Aktifasi</a></li>
 				</ul>
 			</li>
-			<li><a href="{{ route('transaksi.index') }}" class="{{ request()->is('dashboard/transaksi*') ? 'active' : '' }}"><i class='bx bx-spreadsheet icon'></i> Transaksi</a></li>
+			<li>
+				<a href="#" class="{{ request()->is('dashboard/transaksi*') || request()->is('dashboard/pengembalian-transaksi*') || request()->is('dashboard/denda*') ? 'active' : '' }}"><i class='bx bx-spreadsheet icon'></i> Transaksi <i class='bx bx-chevron-right icon-right' ></i></a>
+				<ul class="side-dropdown {{ request()->is('dashboard/transaksi*') || request()->is('dashboard/pengembalian-transaksi*') || request()->is('dashboard/denda*') ? 'show' : '' }}">
+					<li><a href="{{ route('transaksi.index') }}" class="{{ request()->is('dashboard/transaksi*') ? 'active' : '' }}">Transaksi</a></li>
+					<li><a href="{{ route('transaksi.request') }}" class="{{ request()->is('dashboard/pengembalian-transaksi*') ? 'active' : '' }}">Pengajuan</a></li>
+				</ul>
+			</li>
 		@endcan
 
 		<div class="mt-auto">
-			<li class="mt-5"><a href="{{ route('buku.home') }}"><i class='bx bxs-home icon' ></i> Kembali</a></li>
 			<li id="toggle-sidebar-2"><a><i class='bx bx-collapse icon' ></i> <span>Perkecil</span></a></li>
 		</div>
 	</ul>
