@@ -79,6 +79,7 @@
 
   <div class="bg-gray-50 rounded-lg shadow p-3 mt-5 overflow-x-auto">
     <div id="chartTraffic" class="min-w-[600px]"></div>
+    <div id="chartKunjungan"></div>
   </div>
   
   <div class="mt-8">
@@ -244,7 +245,7 @@
   @endcan
 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script>
+    <script>
     var options = {
       series: [
         {
@@ -322,5 +323,39 @@
         chart.render();
   </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+    var options = {
+      series: [{
+        name: 'Total Kunjungan',
+        data: @json($totalKunjungan)
+      }],
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 6,
+          columnWidth: '50%',
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']
+      },
+      yaxis: {
+        title: {
+          text: 'Jumlah Pengunjung'
+        }
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chartKunjungan"), options);
+    chart.render();
+  </script>
 
 @endsection

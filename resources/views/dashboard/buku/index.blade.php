@@ -14,8 +14,10 @@
                 <li><a href="#" class="active">Data Buku</a></li>
             </ul>
         </div>
-
-        <a href="{{ route('buku.create') }}" class="btn-plus"> <i class='bx bx-plus' ></i>Tambah Data</a>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('buku.create') }}" class="btn-plus"><i class='bx bx-plus' ></i>Tambah Data</a>
+            <a href="{{ route('buku.export') }}" class="btn-download"><i class='bx bx-download'></i>Export Excel</a>
+        </div>
     </div>
   
     {{-- Success Alert --}}
@@ -62,6 +64,7 @@
                 <th class="px-4 py-3 text-left font-semibold">Buku</th>
                 <th class="px-4 py-3 text-left font-semibold hidden min-[1000px]:table-cell">Kategori</th>
                 <th class="px-4 py-3 text-left font-semibold hidden min-[1000px]:table-cell">Stok</th>
+                <th class="px-4 py-3 text-left font-semibold hidden min-[1000px]:table-cell">Dibuat</th>
                 <th class="px-4 py-3 text-center font-semibold">Aksi</th>
             </tr>
             </thead>
@@ -76,6 +79,7 @@
                     </td>
                     <td class="px-4 py-3 font-medium hidden min-[1000px]:table-cell">{{ $buku->kategori->nama_kategori }}</td>
                     <td class="px-4 py-3 font-medium hidden min-[1000px]:table-cell">{{ $buku->stok }}</td>
+                    <td class="px-4 py-3 font-medium hidden min-[1000px]:table-cell">{{ $buku->created_at->format('d F Y H:i') }}</td>
                     <td class="px-4 py-3 align-middle">
                         <div class="flex justify-center gap-2">
                         <a href="{{ route('buku.show', $buku->id_buku) }}"

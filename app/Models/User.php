@@ -4,10 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Buku;
+use App\Models\Kunjungan;
 use App\Models\Role;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -25,13 +26,16 @@ class User extends Authenticatable
     protected $primaryKey = 'id_user';
     public $guarded = ['id_user'];
 
-    public function role()
-    {
+    public function role(){
         return $this->belongsTo(Role::class, 'role_id', 'id_role');
     }
 
     public function buku_favorit(){
         return $this->belongsToMany(Buku::class, 'buku_favorit', 'user_id', 'buku_id');
+    }
+
+    public function kunjungan(){
+        return $this->hasMany(Kunjungan::class, 'user_id', 'id_user');
     }
 
     /**

@@ -5,14 +5,15 @@
 		<li><a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}"><i class='bx bxs-dashboard icon' ></i> Dashboard</a></li>
 		<li><a href="{{ route('edit_profil') }}" class="{{ request()->is('dashboard/editprofil') ? 'active' : '' }}"><i class='bx bxs-user icon' ></i> Profil</a></li>
 		@can('user')
-			<li><a href="{{ route('riwayat') }}" class="{{ request()->is('dashboard/riwayat') ? 'active' : '' }}"><i class='bx bxs-time icon' ></i> Riwayat</a></li>
-			<li><a href="{{ route('favorit') }}" class="{{ request()->is('dashboard/favorit') ? 'active' : '' }}"><i class='bx bxs-bookmarks icon' ></i> Favorit</a></li>
-			<li><a href="{{ route('buku.home') }}"><i class='bx bxs-home icon' ></i> Peminjaman</a></li>
-			<li><a href="{{ route('pengembalian') }}" class="{{ request()->is('dashboard/pengembalian') ? 'active' : '' }}"><i class='bx bxs-donate-heart icon' ></i> Pengembalian</a></li>
+		<li><a href="{{ route('riwayat') }}" class="{{ request()->is('dashboard/riwayat') ? 'active' : '' }}"><i class='bx bxs-time icon' ></i> Riwayat</a></li>
+		<li><a href="{{ route('favorit') }}" class="{{ request()->is('dashboard/favorit') ? 'active' : '' }}"><i class='bx bxs-bookmarks icon' ></i> Favorit</a></li>
+		<li><a href="{{ route('buku.home') }}"><i class='bx bxs-home icon' ></i> Peminjaman</a></li>
+		<li><a href="{{ route('pengembalian') }}" class="{{ request()->is('dashboard/pengembalian') ? 'active' : '' }}"><i class='bx bxs-donate-heart icon' ></i> Pengembalian</a></li>
 		@endcan
 		
 		@can('admin')
-			<li class="divider" data-text="ADMIN">ADMIN</li>
+		<li class="divider" data-text="ADMIN">ADMIN</li>
+			<li><a href="{{ route('kunjungan.index') }}" class="{{ request()->is('dashboard/kunjungan*') ? 'active' : '' }}"><i class='bx bxs-user-plus icon'></i>Kunjungan</a></li>
 			<li>
 				<a href="#" class="{{ request()->is('dashboard/buku*') || request()->is('dashboard/kategori*') ? 'active' : '' }}"><i class='bx bxs-book icon' ></i> Katalog <i class='bx bx-chevron-right icon-right' ></i></a>
 				<ul class="side-dropdown {{ request()->is('dashboard/buku*') || request()->is('dashboard/kategori*') ? 'show' : '' }}">

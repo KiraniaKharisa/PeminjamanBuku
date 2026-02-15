@@ -178,6 +178,9 @@ main .title-container {
 main .title-container .btn-plus {
     @apply flex items-center gap-2 px-3 py-2 bg-blue-500 text-gray-50 text-[15px] rounded-lg;
 }
+main .title-container .btn-download {
+    @apply flex items-center gap-2 px-3 py-2 bg-green-500 text-gray-50 text-[15px] rounded-lg;
+}
 main .title {
     @apply text-3xl font-bold mb-[10px];
 }

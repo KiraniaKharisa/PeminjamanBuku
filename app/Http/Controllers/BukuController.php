@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BukuExport;
+use App\Helper\ImageHelper;
 use App\Models\Buku;
 use App\Models\Kategori;
-use App\Helper\ImageHelper;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BukuController extends Controller
 {
@@ -179,4 +181,9 @@ class BukuController extends Controller
             return redirect()->route('buku.index')->with('error', 'Gagal Menghapus Data Buku');
         }
     }
+
+        public function export() {
+        return Excel::download(new BukuExport, 'data-buku-perpustakaan.xlsx');
+    }
+
 }

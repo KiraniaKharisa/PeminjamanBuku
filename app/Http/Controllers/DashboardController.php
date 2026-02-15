@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Buku;
-use App\Models\User;
-use App\Models\Kategori;
-use App\Models\Transaksi;
 use App\Helper\ImageHelper;
 use App\Models\Buku_Favorit;
+use App\Models\Buku;
+use App\Models\Kategori;
+use App\Models\Kunjungan;
+use App\Models\Transaksi;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
@@ -60,6 +61,24 @@ class DashboardController extends Controller
             };
         }
 
+        $tahun = date('Y');
+
+        $data = Kunjungan::select(
+                DB::raw('MONTH(tanggal) as bulan'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->whereYear('tanggal', $tahun)
+            ->groupBy(DB::raw('MONTH(tanggal)'))
+            ->pluck('total','bulan')
+            ->toArray();
+
+        // Buat array 12 bulan default 0
+        $totalKunjungan = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $totalKunjungan[] = $data[$i] ?? 0;
+        }
+
         $salam = '';
         if ($jam >= 5 && $jam < 11) {
             $salam = 'Pagi';
@@ -98,7 +117,8 @@ class DashboardController extends Controller
             'bulanTransaksi' => $bulanTransaksi,
             'transaksiKu' => $transaksiKu,
             'bukuPopuler' => $bukuPopuler,
-            'kategoriPopuler' => $kategoriPopuler
+            'kategoriPopuler' => $kategoriPopuler,
+            'totalKunjungan' => $totalKunjungan,
         ]);
     }
 
